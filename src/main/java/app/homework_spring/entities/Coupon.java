@@ -1,23 +1,66 @@
 package app.homework_spring.entities;
 
 import jakarta.persistence.*;
-
 import java.sql.Date;
 
 @Entity
-@Table(schema = "Coupons")
+@Table(name = "Coupons", schema = "public")  // Changed schema usage for consistency
 public class Coupon {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Specify generation strategy
     private Long id;
 
     private Double discount;
+
+    @Column(name = "expire_date")  // Added @Column for consistency
     private Date expireDate;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    // Constructor
+    public Coupon() {}
+
+    public Coupon(Double discount, Date expireDate, Customer customer) {
+        this.discount = discount;
+        this.expireDate = expireDate;
+        this.customer = customer;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
     @Override
     public String toString() {
@@ -27,47 +70,5 @@ public class Coupon {
                 ", expireDate=" + expireDate +
                 ", customer=" + customer +
                 '}';
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
-    public void setExpireDate(Date expireDate) {
-        this.expireDate = expireDate;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public Date getExpireDate() {
-        return expireDate;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public Coupon() {
-    }
-
-    public Coupon(Long id, double discount, Date expireDate, Customer customer) {
-        this.id = id;
-        this.discount = discount;
-        this.expireDate = expireDate;
-        this.customer = customer;
     }
 }
