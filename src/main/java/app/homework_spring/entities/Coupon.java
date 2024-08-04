@@ -4,21 +4,22 @@ import jakarta.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "Coupons", schema = "public")  // Changed schema usage for consistency
+@Table(name = "Coupons", schema = "public")
 public class Coupon {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Specify generation strategy
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Double discount;
 
-    @Column(name = "expire_date")  // Added @Column for consistency
+    @Column(name = "expire_date")
     private Date expireDate;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
 
     // Constructor
     public Coupon() {}
@@ -29,7 +30,6 @@ public class Coupon {
         this.customer = customer;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

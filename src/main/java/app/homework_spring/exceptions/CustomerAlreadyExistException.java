@@ -9,6 +9,10 @@ public class CustomerAlreadyExistException extends Exception {
         super(message, cause);
     }
 
+    public CustomerAlreadyExistException() {
+        super("Customer with this name already exist");
+    }
+
     public CustomerAlreadyExistException(Throwable cause) {
         super(cause);
     }

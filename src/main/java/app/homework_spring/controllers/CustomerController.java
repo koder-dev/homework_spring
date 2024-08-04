@@ -1,63 +1,75 @@
 package app.homework_spring.controllers;
 
 
-import app.homework_spring.entities.Customer;
+import app.homework_spring.DTO.CustomerDTO;
 import app.homework_spring.exceptions.CustomerAlreadyExistException;
-import app.homework_spring.repositories.CustomerRepo;
+import app.homework_spring.exceptions.CustomerNotFoundException;
 import app.homework_spring.services.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static app.homework_spring.utils.ResponseStringConstants.*;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
-    public final String RESPONSE_OK_TEXT = "Server working!";
-    public final String RESPONSE_OK_POST = "Customer created!";
-    public final String RESPONSE_OK_PUT = "Customer updated!";
-    public final String RESPONSE_OK_DELETE = "Customer deleted!";
-    public final String BAD_REQUEST_TEXT = "Bad request!";
-    public final String BAD_REQUEST_POST = "Bad post request!";
-    public final String BAD_REQUEST_PUT = "Bad put request!";
-    public final String BAD_REQUEST_DELETE = "Bad delete request!";
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
+
+
     @GetMapping
-    public ResponseEntity getCustomers() {
+    public ResponseEntity<String> getCustomers() {
         try {
-            return ResponseEntity.ok(RESPONSE_OK_TEXT);
+            return ResponseEntity.ok(customerService.getAllCustomers().toString());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(BAD_REQUEST_TEXT + " " + e.getMessage());
+            return ResponseEntity.badRequest().body(BAD_REQUEST_GET);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getCustomer(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(customerService.findCustomerById(id).toString());
+        } catch (CustomerNotFoundException e) {
+            return ResponseEntity.badRequest().body(BAD_REQUEST_GET + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(BAD_REQUEST_POST);
         }
     }
 
     @PostMapping
-    public ResponseEntity saveCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<String> saveCustomer(@RequestBody CustomerDTO dto) {
         try {
-            customerService.save(customer);
-            return ResponseEntity.ok(RESPONSE_OK_POST);
+            Long id = customerService.save(dto);
+            return ResponseEntity.ok(RESPONSE_OK_POST + id);
+        } catch (CustomerAlreadyExistException e) {
+            return ResponseEntity.badRequest().body(RESPONSE_OK_POST + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(BAD_REQUEST_POST + " " + e.getMessage());
+            return ResponseEntity.badRequest().body(BAD_REQUEST_POST);
         }
     }
 
-    @PutMapping
-    public ResponseEntity updateCustomer(@RequestBody Customer customer) {
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO dto) {
         try {
+            customerService.update(id, dto);
             return ResponseEntity.ok(RESPONSE_OK_PUT);
+        } catch (CustomerNotFoundException e) {
+            return ResponseEntity.badRequest().body(RESPONSE_OK_PUT + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(BAD_REQUEST_PUT + " " + e.getMessage());
+            return ResponseEntity.badRequest().body(BAD_REQUEST_PUT);
         }
     }
 
     @DeleteMapping
-    public ResponseEntity deleteCustomer(@RequestBody Long id) {
+    public ResponseEntity<String> deleteCustomer(@RequestBody Long id) {
         try {
+            customerService.delete(id);
             return ResponseEntity.ok(RESPONSE_OK_DELETE);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(BAD_REQUEST_DELETE + " " + e.getMessage());
