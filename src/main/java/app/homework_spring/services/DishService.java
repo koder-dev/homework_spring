@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class DishService {
@@ -39,7 +38,7 @@ public class DishService {
         throw new DishAlreadyExistException();
     }
 
-    public List<Dish> get(Double fromPrice, Double toPrice, Integer totalWeight) {
+    public List<Dish> get(Double fromPrice, Double toPrice, Integer maxWeight) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Dish> cq = cb.createQuery(Dish.class);
         Root<Dish> root = cq.from(Dish.class);
@@ -51,14 +50,17 @@ public class DishService {
                 .where(cb.and(predicates.toArray(new Predicate[0])));
 
         TypedQuery<Dish> typedQuery = entityManager.createQuery(cq);
-        if (Objects.isNull(totalWeight)) {
+        if (Objects.isNull(maxWeight)) {
             return typedQuery.getResultList();
         }
-        AtomicInteger currentWeight = new AtomicInteger();
-        return typedQuery.getResultStream().dropWhile(dish -> {
-            currentWeight.addAndGet(dish.getWeight());
-            return currentWeight.get() >= totalWeight;
-        }).toList();
-
+        List<Dish> dishList = typedQuery.getResultList();
+        List<Dish> result = new ArrayList<>();
+        int totalWeight = maxWeight;
+        for (Dish dish : dishList) {
+            if (totalWeight - dish.getWeight() < 0) continue;
+            result.add(dish);
+            totalWeight -= dish.getWeight();
+        }
+        return result;
     }
 }
