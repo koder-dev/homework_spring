@@ -4,10 +4,7 @@ import app.homework_spring.DTO.DishDTO;
 import app.homework_spring.exceptions.DishAlreadyExistException;
 import app.homework_spring.services.DishService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static app.homework_spring.utils.ResponseStringConstants.*;
 
@@ -30,4 +27,16 @@ public class DishController {
         }
     }
 
+    @GetMapping()
+    public ResponseEntity<String> getDishes(
+            @RequestParam(value = "fromPrice", required = false) Double fromPrice,
+            @RequestParam(value = "toPrice", required = false) Double toPrice,
+            @RequestParam(value = "totalWeight", required = false) Integer totalWeight
+            ) {
+        try {
+            return ResponseEntity.ok(dishService.get(fromPrice, toPrice, totalWeight).toString());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(BAD_REQUEST_GET + " " + e.getMessage());
+        }
+    }
 }
