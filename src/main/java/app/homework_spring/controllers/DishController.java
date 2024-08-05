@@ -20,13 +20,13 @@ public class DishController {
     }
 
     @PostMapping
-    public void addDish(@RequestBody DishDTO dishDTO) {
+    public ResponseEntity<String> addDish(@RequestBody DishDTO dishDTO) {
         try {
-            ResponseEntity.ok(dishService.add(dishDTO));
+            return ResponseEntity.ok(dishService.add(dishDTO).toString());
         } catch (DishAlreadyExistException e) {
-            ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(BAD_REQUEST_POST + " " + e.getMessage());
         } catch (Exception e) {
-            ResponseEntity.badRequest().body(BAD_REQUEST_POST);
+            return ResponseEntity.badRequest().body(BAD_REQUEST_POST);
         }
     }
 

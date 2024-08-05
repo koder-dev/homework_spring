@@ -8,4 +8,5 @@ public class ResponseStringConstants {
     public static final String BAD_REQUEST_POST = "Bad post request!";
     public static final String BAD_REQUEST_PUT = "Bad put request!";
     public static final String BAD_REQUEST_DELETE = "Bad delete request!";
+    public static final String DUPLICATE_ENTITY_USAGE = "Bad request! You trying to use a entity that already used with another request!";
 }

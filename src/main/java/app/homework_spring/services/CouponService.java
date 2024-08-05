@@ -22,7 +22,7 @@ public class CouponService {
     }
 
 
-    public CouponService() {};
+    public CouponService() {}
 
     @Transactional
     public Coupon addCoupon(CouponDTO couponDTO) throws CustomerNotFoundException {

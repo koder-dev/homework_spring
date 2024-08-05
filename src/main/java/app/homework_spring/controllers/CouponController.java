@@ -1,7 +1,6 @@
 package app.homework_spring.controllers;
 
 import app.homework_spring.DTO.CouponDTO;
-import app.homework_spring.entities.Coupon;
 import app.homework_spring.exceptions.CustomerNotFoundException;
 import app.homework_spring.services.CouponService;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,7 @@ import static app.homework_spring.utils.ResponseStringConstants.*;
 @RequestMapping("/coupons")
 public class CouponController {
     private final CouponService couponService;
+
     public CouponController(CouponService couponService) {
         this.couponService = couponService;
     }
@@ -22,9 +22,9 @@ public class CouponController {
         try {
             return ResponseEntity.ok(couponService.addCoupon(couponDTO).toString());
         } catch (CustomerNotFoundException e) {
-            return ResponseEntity.badRequest().body(BAD_REQUEST_POST + e.getMessage());
+            return ResponseEntity.badRequest().body(BAD_REQUEST_POST + " " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(BAD_REQUEST_POST + e.getMessage());
+            return ResponseEntity.badRequest().body(BAD_REQUEST_POST);
         }
     }
 

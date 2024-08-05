@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class CustomerService {
 
-    private CustomerRepo customerRepo;
+    private final CustomerRepo customerRepo;
 
     public CustomerService(CustomerRepo customerRepo) {
         this.customerRepo = customerRepo;

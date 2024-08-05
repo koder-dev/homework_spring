@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DishService {
 
-    private DishRepo dishRepo;
+    private final DishRepo dishRepo;
     public DishService(DishRepo dishRepo) {
         this.dishRepo = dishRepo;
     }

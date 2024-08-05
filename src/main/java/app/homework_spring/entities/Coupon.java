@@ -68,7 +68,6 @@ public class Coupon {
                 "id=" + id +
                 ", discount=" + discount +
                 ", expireDate=" + expireDate +
-                ", customer=" + customer +
                 '}';
     }
 }

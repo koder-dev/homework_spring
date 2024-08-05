@@ -13,12 +13,11 @@ public class Customer {
 
     private String fullName;
 
-    private Integer ordersCount;
+    private Integer ordersCount = 0;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Coupon> coupons;
 
-    // Constructor
     public Customer() {}
 
     public Customer(String fullName, Integer ordersCount, List<Coupon> coupons) {
@@ -66,7 +65,6 @@ public class Customer {
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
                 ", ordersCount=" + ordersCount +
-                ", coupons=" + coupons +
                 '}';
     }
 }

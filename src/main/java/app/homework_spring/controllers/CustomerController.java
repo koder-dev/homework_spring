@@ -48,7 +48,7 @@ public class CustomerController {
             Long id = customerService.save(dto);
             return ResponseEntity.ok(RESPONSE_OK_POST + id);
         } catch (CustomerAlreadyExistException e) {
-            return ResponseEntity.badRequest().body(RESPONSE_OK_POST + e.getMessage());
+            return ResponseEntity.badRequest().body(RESPONSE_OK_POST + " " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(BAD_REQUEST_POST);
         }
@@ -60,7 +60,7 @@ public class CustomerController {
             customerService.update(id, dto);
             return ResponseEntity.ok(RESPONSE_OK_PUT);
         } catch (CustomerNotFoundException e) {
-            return ResponseEntity.badRequest().body(RESPONSE_OK_PUT + e.getMessage());
+            return ResponseEntity.badRequest().body(RESPONSE_OK_PUT + " " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(BAD_REQUEST_PUT);
         }
